@@ -20,15 +20,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dashj</groupId>
-        <artifactId>dashj-parent</artifactId>
+        <groupId>org.xazabj</groupId>
+        <artifactId>xazabj-parent</artifactId>
         <version>0.17.4</version>
     </parent>
 
-    <groupId>org.dashj</groupId>
+    <groupId>org.xazabj</groupId>
     <artifactId>wallettemplate</artifactId>
 
-    <name>dashj Wallet-Template</name>
+    <name>xazabj Wallet-Template</name>
 
     <build>
         <plugins>
@@ -73,8 +73,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.dashj</groupId>
-            <artifactId>dashj-core</artifactId>
+            <groupId>org.xazabj</groupId>
+            <artifactId>xazabj-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

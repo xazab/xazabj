@@ -367,7 +367,7 @@ public class PeerGroup implements TransactionBroadcaster, GovernanceVoteBroadcas
         runningBroadcasts = Collections.synchronizedSet(new HashSet<TransactionBroadcast>());
         bloomFilterMerger = new FilterMerger(DEFAULT_BLOOM_FILTER_FP_RATE);
 
-        //DashSpecific
+        //XazabSpecific
 
 
 
@@ -2105,7 +2105,7 @@ public class PeerGroup implements TransactionBroadcaster, GovernanceVoteBroadcas
             }
         }, MoreExecutors.directExecutor());
 
-        // Handle the case of 0.14.0.x nodes disconnecting dashj when sending transactions
+        // Handle the case of 0.14.0.x nodes disconnecting xazabj when sending transactions
         // This will resend the transaction one if it was only sent to 1 peer
         // This will resend the transaction up to 9 times if any one peer was disconnected while sending
         Futures.addCallback(broadcast.future(), new FutureCallback<Transaction>() {

@@ -26,9 +26,9 @@ public class DownloadBlocks {
         Peer peer = peerGroup.getDownloadPeer();
 
         for (String hash : new String[]{
-                "0000000000000011fbdfb7ebea7b3b68c11c82f68fe792e4a376f0f3e1ebfee5",
-                "000000000000001b7c5666cbda73912a5bcff8fc179fdd421fc9bfe7b7e7be73",
-                "000000000000000cdf5cc24c3beb0669b31e942d1301e07b53d6f0c7db10860d", // <<<<< doesn't work with dashj-0.13 branch
+                "00000000000107a3186071032033500c2fd62a000bfb13b5cfdf831f9e301854",
+                "0000000000007d6856bce66915b0eaed443e1df8f9e8337abcd95406a51b9afa",
+                "000000000000de50219a595309b2c786793d68437a60357930bf61e3bfd1f6eb", // <<<<< doesn't work with xazabj-0.13 branch
         }) {
 
             Sha256Hash blockHash = Sha256Hash.wrap(hash);

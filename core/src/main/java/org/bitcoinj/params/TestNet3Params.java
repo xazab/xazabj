@@ -31,8 +31,8 @@ import org.bitcoinj.store.BlockStoreException;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * Parameters for the testnet, a separate public instance of Dash that has relaxed rules suitable for development
- * and testing of applications and new Dash versions.
+ * Parameters for the testnet, a separate public instance of Xazab that has relaxed rules suitable for development
+ * and testing of applications and new Xazab versions.
  */
 public class TestNet3Params extends AbstractBitcoinNetParams {
 
@@ -70,7 +70,7 @@ public class TestNet3Params extends AbstractBitcoinNetParams {
         alertSigningKey = HEX.decode(CoinDefinition.TESTNET_SATOSHI_KEY);
 
         dnsSeeds = new String[] {
-                "testnet-seed.dashdot.io"
+                "testnet-seed.xazabdot.io"
         };
 
         bip32HeaderP2PKHpub = 0x043587cf; // The 4 byte header that serializes in base58 to "tpub".

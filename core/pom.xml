@@ -20,15 +20,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dashj</groupId>
-        <artifactId>dashj-parent</artifactId>
+        <groupId>org.xazabj</groupId>
+        <artifactId>xazabj-parent</artifactId>
         <version>0.17.4</version>
     </parent>
 
-    <artifactId>dashj-core</artifactId>
+    <artifactId>xazabj-core</artifactId>
 
-    <name>dashj</name>
-    <description>A Java Dash library</description>
+    <name>xazabj</name>
+    <description>A Java Xazab library</description>
 
     <packaging>jar</packaging>
 
@@ -341,7 +341,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Coveralls is a online code coverage tool, you can track code coverage here: https://coveralls.io/r/dashevo/dashj -->
+            <!-- Coveralls is a online code coverage tool, you can track code coverage here: https://coveralls.io/r/xazab/xazabj -->
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
@@ -352,8 +352,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.dashj</groupId>
-            <artifactId>dashj-bls</artifactId>
+            <groupId>org.xazabj</groupId>
+            <artifactId>xazabj-bls</artifactId>
             <version>0.17.4</version>
         </dependency>
         <dependency>
@@ -373,7 +373,7 @@
             <version>3.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- dashj consumers are expected to provide their own SLF4J adapters
+        <!-- xazabj consumers are expected to provide their own SLF4J adapters
              such as logback, slf4j-log4j12, slf4j-jcl and so on
              see http://www.slf4j.org/faq.html -->
         <dependency>

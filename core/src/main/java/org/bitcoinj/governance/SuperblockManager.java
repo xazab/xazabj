@@ -163,7 +163,7 @@ public class SuperblockManager {
 
                     Address address = payment.script.getToAddress(context.getParams());
 
-                    // TODO: PRINT NICE N.N DASH OUTPUT
+                    // TODO: PRINT NICE N.N XAZAB OUTPUT
 
                     log.info("CSuperblockManager::CreateSuperblock Before log.info call, nAmount = " + payment.nAmount);
                     log.info("NEW Superblock : output {} (addr {}, amount {})", i, address.toString(), payment.nAmount);

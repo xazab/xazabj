@@ -19,8 +19,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.dashj</groupId>
-  <artifactId>dashj-parent</artifactId>
+  <groupId>org.xazabj</groupId>
+  <artifactId>xazabj-parent</artifactId>
   <version>0.17.4</version>
   <packaging>pom</packaging>
 
@@ -45,9 +45,9 @@
     <url>scm:git:https://github.com/bitcoinj/darkcoinj</url>
   </scm>
 
-  <name>dashj Parent</name>
-  <description>Provides the common configuration for the dashj modules</description>
-  <url>http://dash.org/dashj/</url>
+  <name>xazabj Parent</name>
+  <description>Provides the common configuration for the xazabj modules</description>
+  <url>http://xazab.org/xazabj/</url>
 
   <licenses>
     <license>
@@ -60,7 +60,7 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/HashEngineering/dashj/issues</url>
+    <url>https://github.com/HashEngineering/xazabj/issues</url>
   </issueManagement>
 
   <mailingLists>
@@ -74,8 +74,8 @@
 
     <repository>
       <id>central</id>
-      <name>dash-Dashj</name>
-      <url>https://api.bintray.com/maven/dash/Dashj/org.dashj/;publish=1</url>
+      <name>xazab-Xazabj</name>
+      <url>https://api.bintray.com/maven/xazab/Xazabj/org.xazabj/;publish=1</url>
     </repository>
 
     <snapshotRepository>
@@ -170,7 +170,7 @@
         <artifactId>slf4j-api</artifactId>
         <version>1.7.28</version>
       </dependency>
-      <!-- dashj consumers are expected to provide their own SLF4J adapters
+      <!-- xazabj consumers are expected to provide their own SLF4J adapters
     such as logback, slf4j-log4j12, slf4j-jcl and so on
     see http://www.slf4j.org/faq.html -->
       <dependency>

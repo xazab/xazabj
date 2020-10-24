@@ -3,8 +3,8 @@ package org.bitcoinj.crypto;
 import com.google.common.base.Preconditions;
 import org.bitcoinj.core.ProtocolException;
 import org.bitcoinj.core.Sha256Hash;
-import org.dashj.bls.PrivateKey;
-import org.dashj.bls.PrivateKeyVector;
+import org.xazabj.bls.PrivateKey;
+import org.xazabj.bls.PrivateKeyVector;
 
 import java.util.ArrayList;
 
@@ -97,7 +97,7 @@ public class BLSSecretKey extends BLSAbstractObject
         updateHash();
     }
 
-    /* Dash Core Only
+    /* Xazab Core Only
     boolean secretKeyShare(ArrayList<BLSSecretKey> msk, BLSId id)
     {
         valid = false;

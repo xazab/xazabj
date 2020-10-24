@@ -358,7 +358,7 @@ public class GovernanceVoteConfidence {
         return hash;
     }
 
-    //Dash Specific Additions
+    //Xazab Specific Additions
     public enum IXType {
         IX_NONE,
         IX_REQUEST,

@@ -391,7 +391,7 @@ public class GovernanceObject extends Message implements Serializable {
                     } else if (err == Masternode.CollateralStatus.COLLATERAL_UTXO_NOT_FOUND) {
                         validity.strError = "Failed to find Masternode UTXO, missing masternode=" + strOutpoint + "\n";
                     } else if (err == Masternode.CollateralStatus.COLLATERAL_INVALID_AMOUNT) {
-                        validity.strError = "Masternode UTXO should have 1000 DASH, missing masternode=" + strOutpoint + "\n";
+                        validity.strError = "Masternode UTXO should have 1000 XAZAB, missing masternode=" + strOutpoint + "\n";
                     }
                     */
 

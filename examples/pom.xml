@@ -19,21 +19,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.dashj</groupId>
-        <artifactId>dashj-parent</artifactId>
+        <groupId>org.xazabj</groupId>
+        <artifactId>xazabj-parent</artifactId>
         <version>0.17.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dashj-examples</artifactId>
+    <artifactId>xazabj-examples</artifactId>
 
-    <name>dashj Examples</name>
-    <description>A collection of examples using the dashj library</description>
+    <name>xazabj Examples</name>
+    <description>A collection of examples using the xazabj library</description>
 
     <dependencies>
         <dependency>
-            <groupId>org.dashj</groupId>
-            <artifactId>dashj-core</artifactId>
+            <groupId>org.xazabj</groupId>
+            <artifactId>xazabj-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

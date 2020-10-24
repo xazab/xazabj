@@ -51,7 +51,7 @@ public class LLMQParameters {
             400, 350, 340, 24 * 24, 4, 20, 48, 300, 4, 4);
 
     // Configures a LLMQ and its DKG
-    // See https://github.com/dashpay/dips/blob/master/dip-0006.md for more details
+    // See https://github.com/xazab/dips/blob/master/dip-0006.md for more details
     LLMQType type;
 
     // not consensus critical, only used in logging, RPC and UI

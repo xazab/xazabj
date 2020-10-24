@@ -28,7 +28,7 @@ import org.bitcoinj.quorums.*;
 import org.bitcoinj.script.ScriptException;
 import org.bitcoinj.store.FlatDB;
 import org.bitcoinj.store.HashStore;
-import org.dashj.bls.BLS;
+import org.xazabj.bls.BLS;
 import org.bitcoinj.wallet.SendRequest;
 import org.slf4j.*;
 
@@ -68,7 +68,7 @@ public class Context {
     final private boolean ensureMinRequiredFee;
     final private Coin feePerKb;
 
-    //Dash Specific
+    //Xazab Specific
     private boolean liteMode = true;
     private boolean allowInstantX = true; //allow InstantX in litemode
     public PeerGroup peerGroup;
@@ -224,34 +224,34 @@ public class Context {
     }
 
     //
-    // Dash Specific
+    // Xazab Specific
     //
-    private boolean initializedDash = false;
+    private boolean initializedXazab = false;
 
-    public boolean isInitializedDash() {
-        return initializedDash;
+    public boolean isInitializedXazab() {
+        return initializedXazab;
     }
 
-    public void initDash(boolean liteMode, boolean allowInstantX) {
-        initDash(liteMode, allowInstantX, null);
+    public void initXazab(boolean liteMode, boolean allowInstantX) {
+        initXazab(liteMode, allowInstantX, null);
     }
 
-    public void initDash(boolean liteMode, boolean allowInstantX, @Nullable EnumSet<MasternodeSync.SYNC_FLAGS> syncFlags) {
-        initDash(liteMode, allowInstantX, syncFlags, null);
+    public void initXazab(boolean liteMode, boolean allowInstantX, @Nullable EnumSet<MasternodeSync.SYNC_FLAGS> syncFlags) {
+        initXazab(liteMode, allowInstantX, syncFlags, null);
     }
-    public void initDash(boolean liteMode, boolean allowInstantX, @Nullable EnumSet<MasternodeSync.SYNC_FLAGS> syncFlags,
+    public void initXazab(boolean liteMode, boolean allowInstantX, @Nullable EnumSet<MasternodeSync.SYNC_FLAGS> syncFlags,
         @Nullable EnumSet<MasternodeSync.VERIFY_FLAGS> verifyFlags) {
 
         this.liteMode = liteMode;//liteMode; --TODO: currently only lite mode has been tested and works with 12.1
         this.allowInstantX = allowInstantX;
 
-        //Dash Specific
+        //Xazab Specific
         sporkManager = new SporkManager(this);
 
         masternodePayments = new MasternodePayments(this);
         masternodeSync = syncFlags != null ? new MasternodeSync(this, syncFlags, verifyFlags) : new MasternodeSync(this);
         darkSendPool = new DarkSendPool(this);
-        initializedDash = true;
+        initializedXazab = true;
         governanceManager = new GovernanceManager(this);
         triggerManager = new GovernanceTriggerManager(this);
 
@@ -270,8 +270,8 @@ public class Context {
         BLS.Init();
     }
 
-    public void closeDash() {
-        //Dash Specific
+    public void closeXazab() {
+        //Xazab Specific
         close();
         sporkManager = null;
 
@@ -279,12 +279,12 @@ public class Context {
         masternodeSync = null;
         darkSendPool.close();
         darkSendPool = null;
-        initializedDash = false;
+        initializedXazab = false;
         governanceManager = null;
         masternodeListManager = null;
     }
 
-    public void initDashSync(final String directory)
+    public void initXazabSync(final String directory)
     {
         new Thread(new Runnable() {
             @Override
@@ -333,7 +333,7 @@ public class Context {
     }
 
     public void close() {
-        if(initializedDash) {
+        if(initializedXazab) {
             sporkManager.close(peerGroup);
             masternodeSync.close();
             masternodeListManager.close();
@@ -353,7 +353,7 @@ public class Context {
         this.blockChain = chain;
         hashStore = new HashStore(chain.getBlockStore());
         chain.addNewBestBlockListener(newBestBlockListener);
-        if(initializedDash) {
+        if(initializedXazab) {
             sporkManager.setBlockChain(chain, peerGroup);
             masternodeSync.setBlockChain(chain);
             masternodeListManager.setBlockChain(chain, peerGroup);
@@ -412,7 +412,7 @@ public class Context {
     public void updatedChainHead(StoredBlock chainHead)
     {
         params.setDIPActiveAtTip(chainHead.getHeight() >= params.getDIP0001BlockHeight());
-        if(initializedDash) {
+        if(initializedXazab) {
 
 
         masternodeListManager.updatedBlockTip(chainHead);

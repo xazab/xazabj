@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Dash Core Group
+ * Copyright 2020 Xazab Core Group
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public abstract class ChainLockBlockChainTest {
         BriefLogFormatter.init();
         Context context = new Context(PARAMS, 100, Coin.ZERO, false);
         Context.propagate(context);
-        context.initDash(false, true);
+        context.initXazab(false, true);
     }
 
     public abstract BlockStore createStore(NetworkParameters params, int blockCount) throws BlockStoreException;

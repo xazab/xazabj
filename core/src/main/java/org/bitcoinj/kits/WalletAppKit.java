@@ -126,8 +126,8 @@ public class WalletAppKit extends AbstractIdleService {
         this.directory = checkNotNull(directory);
         this.filePrefix = checkNotNull(filePrefix);
 
-        context.initDash(true, true);
-        context.initDashSync(directory.getAbsolutePath());
+        context.initXazab(true, true);
+        context.initXazabSync(directory.getAbsolutePath());
     }
 
     /**
@@ -136,8 +136,8 @@ public class WalletAppKit extends AbstractIdleService {
     public WalletAppKit(Context context, File directory, String filePrefix, boolean liteMode) {
         this(context, Script.ScriptType.P2PKH, KeyChainGroupStructure.DEFAULT, directory, filePrefix);
 
-        context.initDash(liteMode, true);
-        context.initDashSync(directory.getAbsolutePath());
+        context.initXazab(liteMode, true);
+        context.initXazabSync(directory.getAbsolutePath());
     }
 
     /** Will only connect to the given addresses. Cannot be called after startup. */

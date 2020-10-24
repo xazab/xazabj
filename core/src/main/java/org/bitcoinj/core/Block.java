@@ -61,7 +61,7 @@ public class Block extends Message {
     /** How many bytes are required to represent a block header WITHOUT the trailing 00 length byte. */
     public static final int HEADER_SIZE = 80;
 
-    static final long ALLOWED_TIME_DRIFT = 2 * 60 * 60; // Same value as Dash Core.
+    static final long ALLOWED_TIME_DRIFT = 2 * 60 * 60; // Same value as Xazab Core.
 
     /**
      * A constant shared by the entire network: how large in bytes a block is allowed to be. One day we may have to
@@ -239,25 +239,16 @@ public class Block extends Message {
             dDiff = Utils.convertBitsToDouble(nPrevBits);
         }
 
-        if (nPrevHeight < 5465) {
-            // Early ages...
-            // 1111/((x+1)^2)
-            nSubsidyBase = (long)(1111.0 / (Math.pow((dDiff+1.0),2.0)));
-            if(nSubsidyBase > 500) nSubsidyBase = 500;
-            else if(nSubsidyBase < 1) nSubsidyBase = 1;
-        } else if (nPrevHeight < 17000 || (dDiff <= 75 && nPrevHeight < 24000)) {
-            // CPU mining era
-            // 11111/(((x+51)/6)^2)
-            nSubsidyBase = (long)(11111.0 / (Math.pow((dDiff+51.0)/6.0,2.0)));
-            if(nSubsidyBase > 500) nSubsidyBase = 500;
-            else if(nSubsidyBase < 25) nSubsidyBase = 25;
-        } else {
-            // GPU/ASIC mining era
-            // 2222222/(((x+2600)/9)^2)
-            nSubsidyBase = (long)(2222222.0 / (Math.pow((dDiff+2600.0)/9.0,2.0)));
-            if(nSubsidyBase > 25) nSubsidyBase = 25;
-            else if(nSubsidyBase < 5) nSubsidyBase = 5;
-        }
+              if (nPrevHeight < 1) {
+        nSubsidyBase = 1;
+    } else if (nPrevHeight < 2) {
+        nSubsidyBase = 575000;
+    } else if (nPrevHeight < 3) {
+	nSubsidyBase = 3000;
+    } else {
+	nSubsidyBase = 4;
+    }
+
 
         // LogPrintf("height %u diff %4.2f reward %d\n", nPrevHeight, dDiff, nSubsidyBase);
         Coin nSubsidy = Coin.valueOf(nSubsidyBase * 100000000);
@@ -306,11 +297,11 @@ public class Block extends Message {
     private static final long START_MASTERNODE_PAYMENTS_1 = 1401033600L; //Sun, 25 May 2014 16:00:00 GMT
     private static final long START_MASTERNODE_PAYMENTS_STOP_1 = 1401134533L; // Mon, 26 May 2014 20:02:13 GMT
 
-    private static final long START_MASTERNODE_PAYMENTS = 1403728576L; //Fri, 20 Jun 2014 16:00:00 GMT
+    private static final long START_MASTERNODE_PAYMENTS = 1602721287L; //Fri, 20 Jun 2014 16:00:00 GMT
     //private static final long START_MASTERNODE_PAYMENTS_STOP = ?
 
     private static final long START_MASTERNODE_PAYMENTS_TESTNET_1 = 1401757793;
-    private static final long START_MASTERNODE_PAYMENTS_TESTNET = 1403568776L;
+    private static final long START_MASTERNODE_PAYMENTS_TESTNET = 1602721287L;
 
     @Override
     protected void parse() throws ProtocolException {

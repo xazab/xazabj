@@ -95,7 +95,7 @@ public class BlockChainTest {
         chain = new BlockChain(UNITTEST, wallet, blockStore);
 
         coinbaseTo = Address.fromKey(UNITTEST, wallet.currentReceiveKey());
-        Context.get().initDash(false, true);
+        Context.get().initXazab(false, true);
     }
 
     @Test

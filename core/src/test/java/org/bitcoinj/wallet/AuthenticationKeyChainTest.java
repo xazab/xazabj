@@ -5,9 +5,9 @@ import org.bitcoinj.core.KeyId;
 import org.bitcoinj.crypto.*;
 import org.bitcoinj.params.UnitTestParams;
 import org.bitcoinj.script.Script;
-import org.dashj.bls.ExtendedPrivateKey;
-import org.dashj.bls.JNI;
-import org.dashj.bls.PrivateKey;
+import org.xazabj.bls.ExtendedPrivateKey;
+import org.xazabj.bls.JNI;
+import org.xazabj.bls.PrivateKey;
 import org.junit.Before;
 import org.junit.Test;
 

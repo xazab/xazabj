@@ -55,7 +55,7 @@ public class TestWithWallet {
         myAddress = Address.fromKey(UNITTEST, myKey);
         blockStore = new MemoryBlockStore(UNITTEST);
         chain = new BlockChain(UNITTEST, wallet, blockStore);
-        Context.get().initDash(false, true);
+        Context.get().initXazab(false, true);
     }
 
     public void tearDown() throws Exception {

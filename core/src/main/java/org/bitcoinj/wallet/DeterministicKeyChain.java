@@ -125,7 +125,7 @@ public class DeterministicKeyChain implements EncryptableKeyChain {
     public static final ImmutableList<ChildNumber> BIP44_ACCOUNT_ZERO_PATH_TESTNET = ImmutableList.of(new ChildNumber(44, true),
             ChildNumber.ONE_HARDENED, ChildNumber.ZERO_HARDENED);
 
-    // m / 9' / 5' / 3' / 0' - 1000 DASH for masternode
+    // m / 9' / 5' / 3' / 0' - 1000 XAZAB for masternode
     public static final ImmutableList<ChildNumber> MASTERNODE_HOLDINGS_PATH = ImmutableList.of(new ChildNumber(9, true),
             ChildNumber.FIVE_HARDENED, new ChildNumber(3, true), ChildNumber.ZERO_HARDENED);
     public static final ImmutableList<ChildNumber> MASTERNODE_HOLDINGS_PATH_TESTNET = ImmutableList.of(new ChildNumber(9, true),

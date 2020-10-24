@@ -33,8 +33,8 @@ import static com.google.common.base.Preconditions.checkState;
 import static org.bitcoinj.core.Utils.HEX;
 
 /**
- * Parameters for a named devnet, a separate instance of Dash that has relaxed rules suitable for development
- * and testing of applications and new Dash versions.  The name of the devnet is used to generate the
+ * Parameters for a named devnet, a separate instance of Xazab that has relaxed rules suitable for development
+ * and testing of applications and new Xazab versions.  The name of the devnet is used to generate the
  * second block of the blockchain.
  */
 public class DevNetParams extends AbstractBitcoinNetParams {
