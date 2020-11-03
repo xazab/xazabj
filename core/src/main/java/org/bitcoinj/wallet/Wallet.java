@@ -5621,18 +5621,35 @@ public class Wallet extends BaseTaggableObject
 
     AuthenticationKeyChain providerOwnerKeyChain;
     AuthenticationKeyChain providerVoterKeyChain;
-    AuthenticationKeyChain blockchainUserKeyChain;
-    KeyChainGroup authenticationGroup;
+    AuthenticationKeyChain blockchainIdentityFundingKeyChain;
+    AuthenticationKeyChain blockchainIdentityTopupKeyChain;
+    AuthenticationKeyChain blockchainIdentityKeyChain;
+    AuthenticationKeyChainGroup authenticationGroup;
 
-    public void initializeAuthenticationKeyChains(DeterministicSeed seed, KeyCrypter keyCrypter) {
-        boolean isMainNet = getParams().getId().equals(NetworkParameters.ID_MAINNET);
-        providerOwnerKeyChain = new AuthenticationKeyChain(seed, keyCrypter, isMainNet ? DeterministicKeyChain.PROVIDER_OWNER_PATH : DeterministicKeyChain.PROVIDER_OWNER_PATH_TESTNET);
-        providerVoterKeyChain = new AuthenticationKeyChain(seed, keyCrypter, isMainNet ? DeterministicKeyChain.PROVIDER_VOTING_PATH : DeterministicKeyChain.PROVIDER_VOTING_PATH_TESTNET);
-        blockchainUserKeyChain = new AuthenticationKeyChain(seed, keyCrypter, isMainNet ? DeterministicKeyChain.BLOCKCHAIN_USER_PATH : DeterministicKeyChain.BLOCKCHAIN_USER_PATH_TESTNET);
-        authenticationGroup = KeyChainGroup.builder(getParams()).build();
-        authenticationGroup.addAndActivateHDChain(providerOwnerKeyChain);
-        authenticationGroup.addAndActivateHDChain(providerVoterKeyChain);
-        authenticationGroup.addAndActivateHDChain(blockchainUserKeyChain);
+    public void initializeAuthenticationKeyChains(DeterministicSeed seed, @Nullable KeyParameter keyParameter) {
+        //TODO: add provider*KeyChains when that functionality is required
+        //providerOwnerKeyChain = AuthenticationKeyChain.authenticationBuilder().seed(seed).accountPath(derivationPathFactory.masternodeOwnerDerivationPath()).type(AuthenticationKeyChain.KeyChainType.MASTERNODE_OWNER).build();
+        //providerVoterKeyChain = AuthenticationKeyChain.authenticationBuilder().seed(seed).accountPath(derivationPathFactory.masternodeVotingDerivationPath()).type(AuthenticationKeyChain.KeyChainType.MASTERNODE_VOTING).build();
+        blockchainIdentityFundingKeyChain = AuthenticationKeyChain.authenticationBuilder().seed(seed).accountPath(derivationPathFactory.blockchainIdentityRegistrationFundingDerivationPath()).type(AuthenticationKeyChain.KeyChainType.BLOCKCHAIN_IDENTITY_FUNDING).build();
+        blockchainIdentityTopupKeyChain = AuthenticationKeyChain.authenticationBuilder().seed(seed).accountPath(derivationPathFactory.blockchainIdentityTopupFundingDerivationPath()).type(AuthenticationKeyChain.KeyChainType.BLOCKCHAIN_IDENTITY_TOPUP).build();
+        blockchainIdentityKeyChain = AuthenticationKeyChain.authenticationBuilder().seed(seed).accountPath(derivationPathFactory.blockchainIdentityECDSADerivationPath()).type(AuthenticationKeyChain.KeyChainType.BLOCKCHAIN_IDENTITY).build();
+
+        //encrypt all of the key chains if necessary
+        if(keyParameter != null && getKeyCrypter() != null) {
+            //providerOwnerKeyChain = providerOwnerKeyChain.toEncrypted(getKeyCrypter(), keyParameter);
+            //providerVoterKeyChain = providerVoterKeyChain.toEncrypted(getKeyCrypter(), keyParameter);
+            blockchainIdentityKeyChain = blockchainIdentityKeyChain.toEncrypted(getKeyCrypter(), keyParameter);
+            blockchainIdentityFundingKeyChain = blockchainIdentityFundingKeyChain.toEncrypted(getKeyCrypter(), keyParameter);
+            blockchainIdentityTopupKeyChain = blockchainIdentityTopupKeyChain.toEncrypted(getKeyCrypter(), keyParameter);
+        }
+
+        authenticationGroup = AuthenticationKeyChainGroup.authenticationBuilder(getParams())
+                //.addChain(providerOwnerKeyChain)
+                //.addChain(providerVoterKeyChain)
+                .addChain(blockchainIdentityTopupKeyChain)
+                .addChain(blockchainIdentityFundingKeyChain)
+                .addChain(blockchainIdentityKeyChain)
+                .build();
     }
 
     public AuthenticationKeyChain getProviderOwnerKeyChain() {
