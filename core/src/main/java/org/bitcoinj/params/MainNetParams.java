@@ -103,11 +103,33 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         };                  */
 
         addrSeeds = new int[] {
-                0x1ba7d350,
-                0xbac13956,
-                0x16d4d5b9,
-                0x8461339e,
-                0xa2acb15e
+                0x3495a34e,
+		0x84e8124b,
+		0x0d44937e,
+		0x5fd98966,
+		0x0d44937e,
+		0x285755ea,
+		0xb9d5d448,
+		0x284b1b46,
+		0x1d2b9dcf,
+		0x9a1a370e,
+		0x532c3a4a,
+		0x9a1a3703,
+		0x5fd8ea80,
+		0x9a1a3704,
+		0xa4a65211,
+		0x5fd932d3,
+		0x0d44bc70,
+		0x9a1a370a,
+		0x34bc907b,
+		0x34fa7482,
+		0xfe0b902d,
+		0xb9d5d440,
+		0xb9d5d429,
+		0x2e04cd1c,
+		0x530b2d8d,
+                0x5fd8ea87,
+		0x9a37174a
         };
 
         strSporkAddress = "XnGqZfBZ9TGmDykH12Ryb2u763Ydto4RiP";

@@ -332,6 +332,19 @@ public class Context {
         }).start();
     }
 
+    private void startLLMQThread() {
+        if (llmqBackgroundThread == null || !llmqBackgroundThread.isAlive()) {
+            llmqBackgroundThread = new LLMQBackgroundThread(Context.this);
+            llmqBackgroundThread.start();
+        }
+    }
+
+    private void stopLLMQThread() {
+        if (llmqBackgroundThread.isAlive()) {
+            llmqBackgroundThread.interrupt();
+        }
+    }
+
     public void close() {
         if(initializedXazab) {
             sporkManager.close(peerGroup);
