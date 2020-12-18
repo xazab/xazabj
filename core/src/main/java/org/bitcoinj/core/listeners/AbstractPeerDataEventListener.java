@@ -17,6 +17,7 @@
 package org.bitcoinj.core.listeners;
 
 import org.bitcoinj.core.*;
+import org.bitcoinj.evolution.SimplifiedMasternodeListDiff;
 
 import javax.annotation.*;
 import java.util.*;
@@ -43,5 +44,21 @@ public abstract class AbstractPeerDataEventListener implements PeerDataEventList
     @Override
     public List<Message> getData(Peer peer, GetDataMessage m) {
         return null;
+    }
+
+    @Override
+    public void onHeadersDownloaded(Peer peer, Block block, int blocksLeft) {
+    }
+
+    @Override
+    public void onHeadersDownloadStarted(Peer peer, int blocksLeft) {
+    }
+
+    @Override
+    public void onPreBlocksDownload(Peer peer) {
+    }
+
+    @Override
+    public void onMasterNodeListDiffDownloaded(Stage stage, @Nullable SimplifiedMasternodeListDiff mnlistdiff) {
     }
 }

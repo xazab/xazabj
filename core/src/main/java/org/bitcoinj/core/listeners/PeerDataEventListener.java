@@ -17,6 +17,7 @@
 package org.bitcoinj.core.listeners;
 
 import org.bitcoinj.core.*;
+import org.bitcoinj.evolution.listeners.MasternodeListDownloadedListener;
 
 /**
  * <p>Implementors can listen to events like blocks being downloaded/transactions being broadcast/connect/disconnects,
@@ -24,5 +25,7 @@ import org.bitcoinj.core.*;
  * provide transactions to remote peers when they ask for them.</p>
  */
 public interface PeerDataEventListener extends BlocksDownloadedEventListener, ChainDownloadStartedEventListener,
-        GetDataEventListener, PreMessageReceivedEventListener {
+        GetDataEventListener, PreMessageReceivedEventListener,
+        HeadersDownloadedEventListener, HeadersDownloadStartedEventListener,
+        PreBlocksDownloadListener, MasternodeListDownloadedListener {
 }

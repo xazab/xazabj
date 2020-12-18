@@ -18,15 +18,19 @@
 package org.bitcoinj.core.listeners;
 
 import org.bitcoinj.core.Block;
+import org.bitcoinj.core.Context;
 import org.bitcoinj.core.FilteredBlock;
+import org.bitcoinj.core.MasternodeSync;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Utils;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import org.bitcoinj.evolution.SimplifiedMasternodeListDiff;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -42,9 +46,48 @@ public class DownloadProgressTracker extends AbstractPeerDataEventListener {
     private int lastPercent = 0;
     private SettableFuture<Long> future = SettableFuture.create();
     private boolean caughtUp = false;
+    private boolean requiresHeaders = false;
+    private boolean headersCaughtUp = false;
+    private Stage lastMasternodeListStage = Stage.BeforeStarting;
+    private boolean hasPreBlockProcessing = false;
+    private static final double SYNC_HEADERS = 0.30;
+    private static final double SYNC_MASTERNODE_LIST = 0.05;
+    private static final double SYNC_PREDOWNLOAD = 0.05;
+
+    public double headersWeight = 0.30;
+    public double masternodeListWeight = 0.05;
+    public double preBlocksWeight = 0.05;
+    public double blocksWeight;
+
+    public DownloadProgressTracker() {
+        Context context = Context.get();
+        if (context != null) {
+            hasPreBlockProcessing = context.getSyncFlags().contains(MasternodeSync.SYNC_FLAGS.SYNC_BLOCKS_AFTER_PREPROCESSING);
+        }
+    }
+
+    protected void updateBlocksWeight() {
+        blocksWeight = 1.0 - headersWeight - masternodeListWeight - preBlocksWeight;
+    }
+
+    public void setPreBlocksWeight(double preBlocksWeight) {
+        this.preBlocksWeight = preBlocksWeight;
+        updateBlocksWeight();
+    }
 
     @Override
     public void onChainDownloadStarted(Peer peer, int blocksLeft) {
+        if (blocksLeft == 0) {
+            headersWeight = 0.0;
+            masternodeListWeight = 0.0;
+            preBlocksWeight = 1.0;
+            updateBlocksWeight();
+        } else {
+            headersWeight = SYNC_HEADERS;
+            masternodeListWeight = SYNC_MASTERNODE_LIST;
+            // don't set preblockweight, it may have been set already
+            updateBlocksWeight();
+        }
         if (blocksLeft > 0 && originalBlocksLeft == -1)
             startDownload(blocksLeft);
         // Only mark this the first time, because this method can be called more than once during a chain download
@@ -68,7 +111,7 @@ public class DownloadProgressTracker extends AbstractPeerDataEventListener {
             caughtUp = true;
             if (lastPercent != 100) {
                 lastPercent = 100;
-                progress(lastPercent, blocksLeft, new Date(block.getTimeSeconds() * 1000));
+                progress(calculatePercentage(lastHeadersPercent, lastPercent, true), blocksLeft, new Date(block.getTimeSeconds() * 1000));
             }
             doneDownload();
             future.set(peer.getBestHeight());
@@ -80,7 +123,7 @@ public class DownloadProgressTracker extends AbstractPeerDataEventListener {
 
         double pct = 100.0 - (100.0 * (blocksLeft / (double) originalBlocksLeft));
         if ((int) pct != lastPercent) {
-            progress(pct, blocksLeft, new Date(block.getTimeSeconds() * 1000));
+            progress(calculatePercentage(lastHeadersPercent, pct, true), blocksLeft, new Date(block.getTimeSeconds() * 1000));
             lastPercent = (int) pct;
         }
     }
@@ -92,8 +135,17 @@ public class DownloadProgressTracker extends AbstractPeerDataEventListener {
      * @param date the date of the last block downloaded
      */
     protected void progress(double pct, int blocksSoFar, Date date) {
-        log.info(String.format(Locale.US, "Chain download %d%% done with %d blocks to go, block date %s", (int) pct, blocksSoFar,
-                Utils.dateTimeFormat(date)));
+        if (lastMasternodeListStage.ordinal() > Stage.BeforeStarting.ordinal() &&
+            lastMasternodeListStage.ordinal() < Stage.Complete.ordinal()) {
+            log.info(String.format(Locale.US, "Chain download %d%% done. Processing Masternode Lists...", (int) pct, blocksSoFar,
+                    Utils.dateTimeFormat(date)));
+        } else if (!requiresHeaders || headersCaughtUp) {
+            log.info(String.format(Locale.US, "Chain download %d%% done with %d blocks to go, block date %s", (int) pct, blocksSoFar,
+                    Utils.dateTimeFormat(date)));
+        } else {
+            log.info(String.format(Locale.US, "Header download %d%% done with %d blocks to go, block date %s", (int) pct, blocksSoFar,
+                    Utils.dateTimeFormat(date)));
+        }
     }
 
     /**
@@ -129,5 +181,98 @@ public class DownloadProgressTracker extends AbstractPeerDataEventListener {
      */
     public ListenableFuture<Long> getFuture() {
         return future;
+    }
+
+    @Override
+    public void onHeadersDownloadStarted(Peer peer, int blocksLeft) {
+        requiresHeaders = true;
+        if (blocksLeft == 0) {
+            headersWeight = 0.0;
+            masternodeListWeight = 0.0;
+            preBlocksWeight = 1.0;
+            updateBlocksWeight();
+        } else {
+            headersWeight = SYNC_HEADERS;
+            masternodeListWeight = SYNC_MASTERNODE_LIST;
+            preBlocksWeight = hasPreBlockProcessing ? SYNC_PREDOWNLOAD : 0.0;
+            updateBlocksWeight();
+        }
+        if (blocksLeft > 0 && originalHeadersLeft == -1)
+            startDownload(blocksLeft);
+        // Only mark this the first time, because this method can be called more than once during a chain download
+        // if we switch peers during it.
+        if (originalHeadersLeft == -1)
+            originalHeadersLeft = blocksLeft;
+        else
+            log.info("Chain download switched to {}", peer);
+        if (blocksLeft == 0) {
+            doneHeaderDownload();
+        }
+    }
+
+    @Override
+    public void onHeadersDownloaded(Peer peer, Block lastBlock, int blocksLeft) {
+        if (caughtUp || headersCaughtUp)
+            return;
+
+        if (blocksLeft == 0) {
+            headersCaughtUp = true;
+            if (lastHeadersPercent != 100) {
+                lastHeadersPercent = 100;
+                progress(calculatePercentage(lastHeadersPercent, lastPercent, false), blocksLeft, new Date(lastBlock.getTimeSeconds() * 1000));
+            }
+            doneHeaderDownload();
+            return;
+        }
+
+        if (blocksLeft < 0 || originalHeadersLeft <= 0)
+            return;
+
+        double pct = 100.0 - (100.0 * (blocksLeft / (double) originalHeadersLeft));
+        if ((int) pct != lastHeadersPercent) {
+            progress(calculatePercentage(pct, lastPercent, false), blocksLeft, new Date(lastBlock.getTimeSeconds() * 1000));
+            lastHeadersPercent = (int) pct;
+        }
+    }
+
+    public void doneHeaderDownload() {
+
+    }
+
+    private double calculatePercentage(double percentHeaders, double percentBlocks, boolean preBlockProcessingComplete) {
+
+        //double preBlocksWeightModifier = (hasPreBlockProcessing ? preBlocksWeight : 0.0);
+        //double blocksWeight = 1.0 - headersWeight - masternodeListWeight - preBlocksWeightModifier;
+        if (!requiresHeaders) {
+            headersWeight = 0;
+            blocksWeight = 1.0;
+        }
+        return headersWeight * percentHeaders +
+                calculateMnListStagePercentage(lastMasternodeListStage) +
+                calculatePreBlocksPercentage(preBlockProcessingComplete) +
+                blocksWeight * percentBlocks;
+    }
+
+    private double calculatePercentage(Stage stage) {
+        return lastHeadersPercent * headersWeight + calculateMnListStagePercentage(stage);
+    }
+
+    private double calculateMnListStagePercentage(Stage stage) {
+        int ordinal = Math.min(stage.ordinal(), Stage.Finished.ordinal());
+        return 100 * ordinal * masternodeListWeight / Stage.Finished.ordinal();
+    }
+
+    private double calculatePreBlocksPercentage(boolean preBlockProcessingComplete) {
+        return (preBlockProcessingComplete ? 100 : 0) * (hasPreBlockProcessing ? preBlocksWeight : 0.0);
+    }
+
+    @Override
+    public void onMasterNodeListDiffDownloaded(Stage stage, @Nullable SimplifiedMasternodeListDiff mnlistdiff) {
+        if (lastMasternodeListStage != Stage.Complete) {
+            lastMasternodeListStage = stage;
+            progress(calculatePercentage(stage), originalBlocksLeft, Date.from(Instant.now()));
+            if (stage == Stage.Finished)
+                lastMasternodeListStage = Stage.Complete;
+        }
     }
 }
